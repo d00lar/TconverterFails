@@ -1,0 +1,60 @@
+﻿@using System.Linq.Expressions
+@typeparam T
+
+<MudSelect T="T" @bind-Value="@Value" For="@For" >
+    @if (_dict != null) @foreach (var item in _dict.Values)
+        {
+            <MudSelectItem  Value="TConverter.ChangeType<T>(item.Key)">@item.Value</MudSelectItem>
+        }
+</MudSelect>
+     
+
+@code {
+
+    [Parameter]
+    public Expression<Func<T>>? For { get; set; }
+
+    private T _value = default!;
+
+    [Parameter]
+    public T Value
+    {
+        get => _value;
+        set 
+        {
+            if (!Equals(value, _value))
+            {
+                _value = value;
+                //_value = TConverter.ChangeType<T>(value);
+                if (ValueChanged.HasDelegate)
+                    ValueChanged.InvokeAsync(_value);
+            }
+        }
+    }
+
+    [Parameter]
+    public EventCallback<T> ValueChanged {  get;set; } 
+
+
+
+    private IntStrDict?_dict  ;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (_dict == null) _dict = _dict = new IntStrDict
+        {
+            Values = new List<KeyValuePair<int, string>>()
+            {
+                new KeyValuePair<int, string>(1,"asd1"),
+                new KeyValuePair<int, string>(2,"asd2"),
+                new KeyValuePair<int, string>(3,"asd3"),
+            }
+        };
+
+        await base.OnInitializedAsync();
+        StateHasChanged();
+    }
+
+
+}

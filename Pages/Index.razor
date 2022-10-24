@@ -1,0 +1,14 @@
+﻿@page "/"
+@using MyApplication.Shared
+
+<PageTitle>Index</PageTitle>
+
+<IntStrDictMudSelectComponent @bind-Value="@intvar" For="@(()=>intvar)"/>
+@*<IntStrDictMudSelectComponent @bind-Value="@nullintvar"For="@(()=>nullintvar)" />*@
+
+
+
+@code{
+   private int intvar;
+   private int? nullintvar;
+}
